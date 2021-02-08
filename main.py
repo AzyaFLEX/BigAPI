@@ -28,20 +28,21 @@ class App(QWidget):
                 self.scale += 0.1
                 self.update()
         if event.key() == Qt.Key_PageDown:
-            if self.scale - 0.1 > 0:
+            if self.scale - 0.1 > 0.001:
                 self.scale -= 0.1
                 self.update()
+        move = self.scale / 0.1 * 0.01
         if event.key() == Qt.Key_Up:
-            self.coords = (self.coords[0], self.coords[1] + 0.01)
+            self.coords = (self.coords[0], self.coords[1] + move)
             self.update()
         if event.key() == Qt.Key_Left:
-            self.coords = (self.coords[0] - 0.01, self.coords[1])
+            self.coords = (self.coords[0] - move, self.coords[1])
             self.update()
         if event.key() == Qt.Key_Right:
-            self.coords = (self.coords[0] + 0.01, self.coords[1])
+            self.coords = (self.coords[0] + move, self.coords[1])
             self.update()
         if event.key() == Qt.Key_Down:
-            self.coords = (self.coords[0], self.coords[1] - 0.01)
+            self.coords = (self.coords[0], self.coords[1] - move)
             self.update()
 
     def set_map(self):
