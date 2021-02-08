@@ -26,13 +26,11 @@ class App(QWidget):
         if event.key() == Qt.Key_PageUp:
             if self.scale + 0.1 <= 3:
                 self.scale += 0.1
-                print(self.scale)
-            self.set_map()
+                self.update()
         if event.key() == Qt.Key_PageDown:
             if self.scale - 0.1 > 0:
                 self.scale -= 0.1
-                print(self.scale)
-                self.set_map()
+                self.update()
         if event.key() == Qt.Key_Up:
             self.coords = (self.coords[0], self.coords[1] + 0.01)
             self.update()
