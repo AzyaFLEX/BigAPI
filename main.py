@@ -34,13 +34,17 @@ class App(QWidget):
                 print(self.scale)
                 self.set_map()
         if event.key() == Qt.Key_Up:
-            print(1)
+            self.coords = (self.coords[0], self.coords[1] + 0.01)
+            self.update()
         if event.key() == Qt.Key_Left:
-            print(2)
+            self.coords = (self.coords[0] - 0.01, self.coords[1])
+            self.update()
         if event.key() == Qt.Key_Right:
-            print(3)
+            self.coords = (self.coords[0] + 0.01, self.coords[1])
+            self.update()
         if event.key() == Qt.Key_Down:
-            print(4)
+            self.coords = (self.coords[0], self.coords[1] - 0.01)
+            self.update()
 
     def set_map(self):
         try:
@@ -51,6 +55,12 @@ class App(QWidget):
             self.image.setPixmap(pixmap)
         except Exception as error:
             print(error)
+
+    def update(self):
+        with open("map_file.txt", "wb") as file:
+            file.write(get_map(self.coords, self.scale))
+        pixmap = QPixmap("map_file.txt")
+        self.image.setPixmap(pixmap)
 
     def get_coords(self):
         if self.field.text():
