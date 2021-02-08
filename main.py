@@ -18,6 +18,8 @@ class App(QWidget):
         self.btn.clicked.connect(self.set_map)
         self.scale = 0.1
         self.start = "2-й Давыдовский мкр., 21, Кострома, Костромская обл., 156016"
+        self.coords = None
+        self.get_coords()
         self.set_map()
 
     def keyPressEvent(self, event):
@@ -31,16 +33,30 @@ class App(QWidget):
                 self.scale -= 0.1
                 print(self.scale)
                 self.set_map()
+        if event.key() == Qt.Key_Up:
+            print(1)
+        if event.key() == Qt.Key_Left:
+            print(2)
+        if event.key() == Qt.Key_Right:
+            print(3)
+        if event.key() == Qt.Key_Down:
+            print(4)
 
     def set_map(self):
+        try:
+            self.get_coords()
+            with open("map_file.txt", "wb") as file:
+                file.write(get_map(self.coords, self.scale))
+            pixmap = QPixmap("map_file.txt")
+            self.image.setPixmap(pixmap)
+        except Exception as error:
+            print(error)
+
+    def get_coords(self):
         if self.field.text():
-            with open("map_file.txt", "wb") as file:
-                file.write(get_map(get_coords(get_address(self.field.text())), self.scale))
+            self.coords = get_coords(get_address(self.field.text()))
         else:
-            with open("map_file.txt", "wb") as file:
-                file.write(get_map(get_coords(get_address(self.start)), self.scale))
-        pixmap = QPixmap("map_file.txt")
-        self.image.setPixmap(pixmap)
+            self.coords = get_coords(get_address(self.start))
 
 
 if __name__ == "__main__":
