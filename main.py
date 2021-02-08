@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import Qt
 from PyQt5 import uic
 from API import *
 import sys
@@ -8,16 +9,28 @@ import sys
 class App(QWidget):
     def __init__(self):
         """
-        :arg self.image : QLabel под изображение
-        :arg self.field : QLineEdit под поле запроса
-        :arg self.btn : QPushButton кнопка
+        :param self.image : QLabel под изображение
+        :param self.field : QLineEdit под поле запроса
+        :param self.btn : QPushButton кнопка
         """
         super().__init__()
         uic.loadUi("main.ui", self)
         self.btn.clicked.connect(self.set_map)
-        self.scale = 0.05
+        self.scale = 0.1
         self.start = "2-й Давыдовский мкр., 21, Кострома, Костромская обл., 156016"
         self.set_map()
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_PageUp:
+            if self.scale + 0.1 <= 3:
+                self.scale += 0.1
+                print(self.scale)
+            self.set_map()
+        if event.key() == Qt.Key_PageDown:
+            if self.scale - 0.1 > 0:
+                self.scale -= 0.1
+                print(self.scale)
+                self.set_map()
 
     def set_map(self):
         if self.field.text():
