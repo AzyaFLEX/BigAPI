@@ -17,7 +17,7 @@ class App(QWidget):
         uic.loadUi("main.ui", self)
         self.btn.clicked.connect(self.set_map)
         self.change_lay.clicked.connect(self.def_change_lay)
-        self.return_lay.clioked.connect(self.def_return_lay)
+        self.return_lay.clicked.connect(self.def_return_lay)
         self.scale = 0.1
         self.start = "2-й Давыдовский мкр., 21, Кострома, Костромская обл., 156016"
         self.map = "map"
