@@ -43,11 +43,12 @@ class App(QWidget):
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_PageUp:
             if self.scale + 0.1 <= 3:
-                self.scale += 0.1
+                self.scale *= 2
                 self.update()
         if event.key() == Qt.Key_PageDown:
-            if self.scale - 0.1 > 0.001:
-                self.scale -= 0.1
+            if self.scale + 0.00001 > 0.00078125:
+                self.scale /= 2
+                print(self.scale)
                 self.update()
         move = self.scale / 0.1 * 0.01
         if event.key() == Qt.Key_Up:
