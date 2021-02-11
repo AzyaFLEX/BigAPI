@@ -67,6 +67,7 @@ class App(QWidget):
             file.write(get_map(self.coords, self.scale, self.map))
         pixmap = QPixmap("map_file.txt")
         self.image.setPixmap(pixmap)
+        self.setFocus(True)
 
     def get_coords(self):
         if self.field.text():
