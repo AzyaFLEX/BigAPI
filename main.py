@@ -48,7 +48,6 @@ class App(QWidget):
         if event.key() == Qt.Key_PageDown:
             if self.scale + 0.00001 > 0.00078125:
                 self.scale /= 2
-                print(self.scale)
                 self.update()
         move = self.scale / 0.1 * 0.01
         if event.key() == Qt.Key_Up:
