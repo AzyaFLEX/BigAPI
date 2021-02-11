@@ -16,11 +16,17 @@ class App(QWidget):
         super().__init__()
         uic.loadUi("main.ui", self)
         self.btn.clicked.connect(self.set_map)
+        self.change_lay.clicked.connect(self.def_change_lay)
         self.scale = 0.1
         self.start = "2-й Давыдовский мкр., 21, Кострома, Костромская обл., 156016"
+        self.map = "map"
         self.coords = None
         self.get_coords()
         self.set_map()
+
+    def def_change_lay(self):
+        self.map = {"map": "sat", "sat": "skl", "skl": "trf", "trf": "map"}[self.map]
+        self.update()
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_PageUp:
@@ -49,7 +55,7 @@ class App(QWidget):
         try:
             self.get_coords()
             with open("map_file.txt", "wb") as file:
-                file.write(get_map(self.coords, self.scale))
+                file.write(get_map(self.coords, self.scale, self.map))
             pixmap = QPixmap("map_file.txt")
             self.image.setPixmap(pixmap)
             self.setFocus(True)
@@ -58,7 +64,7 @@ class App(QWidget):
 
     def update(self):
         with open("map_file.txt", "wb") as file:
-            file.write(get_map(self.coords, self.scale))
+            file.write(get_map(self.coords, self.scale, self.map))
         pixmap = QPixmap("map_file.txt")
         self.image.setPixmap(pixmap)
 
