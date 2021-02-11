@@ -22,7 +22,7 @@ class App(QWidget):
         self.scale = 0.1
         self.start = "2-й Давыдовский мкр., 21, Кострома, Костромская обл., 156016"
         self.map = "map"
-        self.coords = None
+        self.coords, self.coords_flag = None, None
         self.get_coords()
         self.set_map()
 
@@ -67,7 +67,8 @@ class App(QWidget):
         try:
             self.get_coords()
             with open("map_file.txt", "wb") as file:
-                file.write(get_map(self.coords, self.scale, self.map))
+                self.coords_flag = self.coords
+                file.write(get_map(self.coords, self.scale, self.map, self.coords_flag))
             pixmap = QPixmap("map_file.txt")
             self.image.setPixmap(pixmap)
             self.setFocus(True)
@@ -76,7 +77,7 @@ class App(QWidget):
 
     def update(self):
         with open("map_file.txt", "wb") as file:
-            file.write(get_map(self.coords, self.scale, self.map))
+            file.write(get_map(self.coords, self.scale, self.map, self.coords_flag))
         pixmap = QPixmap("map_file.txt")
         self.image.setPixmap(pixmap)
         self.setFocus(True)
