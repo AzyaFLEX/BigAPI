@@ -52,6 +52,7 @@ class App(QWidget):
                 file.write(get_map(self.coords, self.scale))
             pixmap = QPixmap("map_file.txt")
             self.image.setPixmap(pixmap)
+            self.setFocus(True)
         except Exception as error:
             print(error)
 
