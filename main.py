@@ -18,12 +18,19 @@ class App(QWidget):
         self.btn.clicked.connect(self.set_map)
         self.change_lay.clicked.connect(self.def_change_lay)
         self.return_lay.clicked.connect(self.def_return_lay)
+        self.cancel.clicked.connect(self.def_cancel)
         self.scale = 0.1
         self.start = "2-й Давыдовский мкр., 21, Кострома, Костромская обл., 156016"
         self.map = "map"
         self.coords = None
         self.get_coords()
         self.set_map()
+
+    def def_cancel(self):
+        helper = self.field.text()
+        self.field.setText(self.start)
+        self.set_map()
+        self.field.setText(helper)
 
     def def_change_lay(self):
         self.map = {"map": "sat", "sat": "skl", "skl": "trf", "trf": "map"}[self.map]
