@@ -19,9 +19,11 @@ class App(QWidget):
         self.change_lay.clicked.connect(self.def_change_lay)
         self.return_lay.clicked.connect(self.def_return_lay)
         self.cancel.clicked.connect(self.def_cancel)
+        self.label.setText("Полный адрес:")
         self.scale = 0.1
         self.start = "2-й Давыдовский мкр., 21, Кострома, Костромская обл., 156016"
         self.map = "map"
+        self.full_adress.setText(get_address(self.start))
         self.coords, self.coords_flag = None, None
         self.get_coords()
         self.set_map()
@@ -29,6 +31,7 @@ class App(QWidget):
     def def_cancel(self):
         helper = self.field.text()
         self.field.setText(self.start)
+        self.full_adress.setText(get_address(self.start))
         self.set_map()
         self.field.setText(helper)
 
@@ -48,7 +51,6 @@ class App(QWidget):
         if event.key() == Qt.Key_PageDown:
             if self.scale + 0.00001 > 0.00078125:
                 self.scale /= 2
-                print(self.scale)
                 self.update()
         move = self.scale / 0.1 * 0.01
         if event.key() == Qt.Key_Up:
@@ -67,6 +69,10 @@ class App(QWidget):
     def set_map(self):
         try:
             self.get_coords()
+            if self.field.text():
+                self.full_adress.setText(get_address(self.field.text()))
+            else:
+                self.full_adress.setText(get_address(self.start))
             with open("map_file.txt", "wb") as file:
                 self.coords_flag = self.coords
                 file.write(get_map(self.coords, self.scale, self.map, self.coords_flag))
