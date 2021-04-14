@@ -36,7 +36,10 @@ def get_address(address, add_postcode=False):
         toponym = json_response["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]
         toponym_address = toponym["metaDataProperty"]["GeocoderMetaData"]["text"]
         if add_postcode:
-            return toponym_address + ', ' + get_index(address)
+            if get_index(address):
+                return toponym_address + ', ' + get_index(address)
+            else:
+                return toponym_address
         else:
             return toponym_address
     else:

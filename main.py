@@ -45,7 +45,8 @@ class App(QWidget):
         self.full_adress.setText(get_address(address, self.is_postcode_added))
 
     def add_postcode(self):
-        self.is_postcode_added = not self.is_postcode_added
+        self.is_postcode_added = not self.is_postcode_added    # 9
+        self.write_full_address(self.full_adress.text())    # 10
 
     def def_return_lay(self):
         self.map = "map"
