@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt
 from PyQt5 import uic
 from API import *
 import sys
+import os
 
 
 class App(QWidget):
@@ -19,25 +20,32 @@ class App(QWidget):
         self.change_lay.clicked.connect(self.def_change_lay)
         self.return_lay.clicked.connect(self.def_return_lay)
         self.cancel.clicked.connect(self.def_cancel)
-        self.label.setText("Полный адрес:")
+        self.postcode.stateChanged.connect(self.add_postcode)
+        self.is_postcode_added = False
         self.scale = 0.1
         self.start = "2-й Давыдовский мкр., 21, Кострома, Костромская обл., 156016"
         self.map = "map"
-        self.full_adress.setText(get_address(self.start))
         self.coords, self.coords_flag = None, None
         self.get_coords()
         self.set_map()
+        self.write_full_address(self.start)
 
     def def_cancel(self):
         helper = self.field.text()
         self.field.setText(self.start)
-        self.full_adress.setText(get_address(self.start))
+        self.write_full_address(self.start)
         self.set_map()
         self.field.setText(helper)
 
     def def_change_lay(self):
         self.map = {"map": "sat", "sat": "skl", "skl": "trf", "trf": "map"}[self.map]
         self.update()
+
+    def write_full_address(self, address):
+        self.full_adress.setText(get_address(address, self.is_postcode_added))
+
+    def add_postcode(self):
+        self.is_postcode_added = not self.is_postcode_added
 
     def def_return_lay(self):
         self.map = "map"
@@ -70,9 +78,9 @@ class App(QWidget):
         try:
             self.get_coords()
             if self.field.text():
-                self.full_adress.setText(get_address(self.field.text()))
+                self.write_full_address(self.field.text())
             else:
-                self.full_adress.setText(get_address(self.start))
+                self.write_full_address(self.start)
             with open("map_file.txt", "wb") as file:
                 self.coords_flag = self.coords
                 file.write(get_map(self.coords, self.scale, self.map, self.coords_flag))
@@ -100,4 +108,6 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     ex = App()
     ex.show()
-    sys.exit(app.exec())
+    exec_ = app.exec()
+    os.system('echo. > map_file.txt')
+    sys.exit(exec_)
