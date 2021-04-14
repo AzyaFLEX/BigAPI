@@ -45,8 +45,10 @@ class App(QWidget):
         self.full_adress.setText(get_address(address, self.is_postcode_added))
 
     def add_postcode(self):
-        self.is_postcode_added = not self.is_postcode_added    # 9
-        self.write_full_address(self.full_adress.text())    # 10
+        # у многих адресов нет почтового индекса.
+        # для теста можно использовать адрес офиса Яндекса (Москва Льва Толстого 16)
+        self.is_postcode_added = not self.is_postcode_added    # 9 задача
+        self.write_full_address(self.full_adress.text())    # 10 задача
 
     def def_return_lay(self):
         self.map = "map"
