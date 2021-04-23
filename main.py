@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
+from PyQt5 import QtCore
 from PyQt5 import uic
 from API import *
 import sys
@@ -23,9 +24,11 @@ class App(QWidget):
         self.postcode.stateChanged.connect(self.add_postcode)
         self.is_postcode_added = False
         self.scale = 0.1
-        self.start = "2-й Давыдовский мкр., 21, Кострома, Костромская обл., 156016"
+        self.start = "Лицей 17, 2-й Давыдовский мкр., 21, Кострома, Костромская обл.,"
         self.map = "map"
         self.coords, self.coords_flag = None, None
+        self.center = (512, 420)
+        self.points = []
         self.get_coords()
         self.set_map()
         self.write_full_address(self.start)
@@ -53,6 +56,14 @@ class App(QWidget):
     def def_return_lay(self):
         self.map = "map"
         self.update()
+
+    def mousePressEvent(self, event):
+        if event.buttons() == QtCore.Qt.RightButton:
+            move = self.scale / 0.1 * 0.01
+            data = [event.x() - self.center[0], event.y() - self.center[1]]
+            point = [self.coords[0] + data[0] * (self.scale / 150),
+                           self.coords[1] - data[1] * (self.scale / 150)]
+            print(get_organization(get_coords_to_address(point))[0]['properties']['name'])
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_PageUp:
@@ -86,7 +97,7 @@ class App(QWidget):
                 self.write_full_address(self.start)
             with open("map_file.txt", "wb") as file:
                 self.coords_flag = self.coords
-                file.write(get_map(self.coords, self.scale, self.map, self.coords_flag))
+                file.write(get_map(self.coords, self.scale, self.map, [self.coords_flag] + self.points))
             pixmap = QPixmap("map_file.txt")
             self.image.setPixmap(pixmap)
             self.setFocus(True)
@@ -95,7 +106,7 @@ class App(QWidget):
 
     def update(self):
         with open("map_file.txt", "wb") as file:
-            file.write(get_map(self.coords, self.scale, self.map, self.coords_flag))
+            file.write(get_map(self.coords, self.scale, self.map, [self.coords_flag] + self.points))
         pixmap = QPixmap("map_file.txt")
         self.image.setPixmap(pixmap)
         self.setFocus(True)
