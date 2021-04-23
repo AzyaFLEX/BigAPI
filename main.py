@@ -63,7 +63,9 @@ class App(QWidget):
             data = [event.x() - self.center[0], event.y() - self.center[1]]
             point = [self.coords[0] + data[0] * (self.scale / 150),
                            self.coords[1] - data[1] * (self.scale / 150)]
-            print(get_organization(get_coords_to_address(point))[0]['properties']['name'])
+            data = get_organization(get_coords_to_address(point))[0]['properties']['name']
+            if data:
+                self.field_2.setText(data)
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_PageUp:
